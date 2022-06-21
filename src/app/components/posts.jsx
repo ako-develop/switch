@@ -1,6 +1,7 @@
 import PostsList from "./postsList";
 import Post from "./post";
 import query from "query-string";
+import _ from "lodash";
 
 
 const Posts = ({match, location}) => {
@@ -9,10 +10,11 @@ const Posts = ({match, location}) => {
         {id:2, label:"post 2"},
         {id:3, label:"post 3"},
       ];
-      const search = location.search;
+      const search = query.parse (location.search);
       const postId=match.params.postId;
       console.log(search);
-      return <> {postId ? <Post posts={posts} id={postId}/> : <PostsList posts={posts}/>}</>;
+      const cropPosts=search ? _(posts).slice(0).take(search.count).value():posts
+      return <> {postId ? <Post posts={posts} id={postId}/> : <PostsList posts={cropPosts}/>}</>;
 };
  
 export default Posts;
